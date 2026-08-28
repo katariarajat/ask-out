@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question 2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .emoji {
+            font-size: 70px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        h1 {
+            color: #f5576c;
+            font-size: 28px;
+            margin: 20px 0;
+            font-weight: 700;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .option-btn {
+            padding: 18px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.3);
+        }
+
+        .option-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .option-btn.no {
+            background: linear-gradient(135deg, #ff5252 0%, #e53935 100%);
+        }
+
+        .option-btn.no:hover {
+            background: linear-gradient(135deg, #ff5252 0%, #e53935 100%);
+        }
+
+        .joke-box {
+            display: none;
+            padding: 25px;
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-radius: 20px;
+            margin-top: 25px;
+            color: #e65100;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 1.6;
+            border: 2px dashed #ff9800;
+        }
+
+        .joke-emoji {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .continue-btn {
+            display: none;
+            margin: 10px 5px 0 5px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .continue-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .missed-joke-box {
+            display: none;
+            padding: 25px;
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border-radius: 20px;
+            margin-top: 25px;
+            color: #c62828;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 1.6;
+            border: 2px dashed #f44336;
+        }
+
+        .success {
+            display: none;
+            text-align: center;
+        }
+
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 5;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: float 4s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .progress {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .progress-dot.active {
+            background: #f5576c;
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+            
+            h1 {
+                font-size: 22px;
+            }
+            
+            .option-btn {
+                padding: 15px 25px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    
+    <div class="container">
+        <div class="progress">
+            <div class="progress-dot"></div>
+            <div class="progress-dot active"></div>
+            <div class="progress-dot"></div>
+            <div class="progress-dot"></div>
+        </div>
+
+        <div class="emoji">😂</div>
+        <h1>Do you want to hear a joke?</h1>
+        
+        <div class="options">
+            <button class="option-btn" onclick="selectOption('yes')">Yes, tell me a joke! 😄</button>
+            <button class="option-btn" onclick="selectOption('no')">No thanks, I'm good 😊</button>
+        </div>
+
+        <div class="joke-box" id="joke-box">
+            <div class="joke-emoji">😂</div>
+            <div id="joke-text"></div>
+            <button class="continue-btn" id="continue-btn" onclick="nextJoke()">Next joke! 🎉</button>
+            <button class="continue-btn" id="skip-btn" onclick="goToNext()">Skip for now →</button>
+        </div>
+
+        <div class="missed-joke-box" id="missed-joke-box">
+            <div class="joke-emoji">😢</div>
+            <div id="missed-joke-text">You're missing out on some really good jokes! Are you sure?</div>
+            <button class="continue-btn" id="try-again-btn" onclick="tryAgain()">Okay, tell me one! 😄</button>
+            <button class="continue-btn" id="really-skip-btn" onclick="goToNext()">No, really skip →</button>
+        </div>
+    </div>
+
+    <script>
+        const jokes = [
+            "Rajat once asked out a girl and asked her for her Instagram... she refused to give her Instagram to him... even though it was a public account! 😂",
+            "A doctor tells his patient, 'I have bad news and worse news.' 'Oh dear, what's the bad news?' asks the patient. The doctor replies, 'You only have 24 hours to live.' 'That's terrible,' says the patient. 'What could be worse news?' The doctor responds, 'I was supposed to tell you yesterday!' 😂",
+            "True heartbreak isn't being left on read; it's being a male doctor who falls in love with a nurse, only to spend a twelve-hour shift calling the love of your life \'Sister'\'."
+            
+        ];
+        
+        let currentJokeIndex = 0;
+
+        function selectOption(option) {
+            const answers = {
+                'yes': 'Yes, tell me a joke!',
+                'no': 'No thanks, I\'m good'
+            };
+            
+            if (option === 'yes') {
+                showJoke();
+                sendResponse('question2', answers[option]);
+            } else {
+                document.getElementById('missed-joke-box').style.display = 'block';
+                sendResponse('question2', answers[option]);
+            }
+        }
+
+        function tryAgain() {
+            document.getElementById('missed-joke-box').style.display = 'none';
+            showJoke();
+        }
+
+        function showJoke() {
+            document.getElementById('joke-text').textContent = jokes[currentJokeIndex];
+            document.getElementById('joke-box').style.display = 'block';
+            document.getElementById('continue-btn').style.display = 'inline-block';
+            document.getElementById('skip-btn').style.display = 'inline-block';
+        }
+
+        function nextJoke() {
+            currentJokeIndex = (currentJokeIndex + 1) % jokes.length;
+            showJoke();
+        }
+
+        function goToNext() {
+            window.location.href = 'page4.html';
+        }
+
+        async function sendResponse(question, answer) {
+            try {
+                await fetch('/api/response', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        question: question,
+                        answer: answer,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+            } catch (error) {
+                console.error('Error sending response:', error);
+            }
+        }
+
+        // Create floating hearts
+        for (let i = 0; i < 15; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = '💕';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDelay = Math.random() * 4 + 's';
+            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            document.getElementById('hearts').appendChild(heart);
+        }
+    </script>
+</body>
+</html>

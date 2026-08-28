@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question 3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .emoji {
+            font-size: 70px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .success h1 {
+            color: #4CAF50;
+        }
+
+        h1 {
+            color: #00f2fe;
+            font-size: 28px;
+            margin: 20px 0;
+            font-weight: 700;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .option-btn {
+            padding: 18px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3);
+        }
+
+        .option-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(79, 172, 254, 0.4);
+        }
+
+        .clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 5;
+        }
+
+        .cloud {
+            position: absolute;
+            font-size: 40px;
+            animation: floatCloud 8s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes floatCloud {
+            0%, 100% {
+                transform: translateX(-100px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateX(100vw);
+                opacity: 0;
+            }
+        }
+
+        .progress {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .progress-dot.active {
+            background: #00f2fe;
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+            
+            h1 {
+                font-size: 22px;
+            }
+            
+            .option-btn {
+                padding: 15px 25px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="clouds" id="clouds"></div>
+    
+    <div class="container">
+        <div class="progress">
+            <div class="progress-dot"></div>
+            <div class="progress-dot active"></div>
+            <div class="progress-dot"></div>
+        </div>
+
+        <div class="emoji">🎯</div>
+        <h1>What's your biggest dream?</h1>
+        <p style="color: #666; font-size: 16px; margin-bottom: 25px;">If you could achieve anything in life, what would it be?</p>
+        
+        <div class="options">
+            <button class="option-btn" onclick="selectOption('success')">Become incredibly successful and wealthy 💰</button>
+            <button class="option-btn" onclick="selectOption('travel')">Travel the world and explore new places ✈️</button>
+            <button class="option-btn" onclick="selectOption('impact')">Make a positive impact on people's lives 🌟</button>
+            <button class="option-btn" onclick="selectOption('happy')">Find true happiness and inner peace 😊</button>
+        </div>
+    </div>
+
+    <script>
+        function selectOption(option) {
+            const answers = {
+                'success': 'Become incredibly successful and wealthy',
+                'travel': 'Travel the world and explore new places',
+                'impact': 'Make a positive impact on people\'s lives',
+                'happy': 'Find true happiness and inner peace'
+            };
+            
+            sendResponse('question3', answers[option]);
+            setTimeout(() => {
+                window.location.href = 'page4.html';
+            }, 500);
+        }
+
+        async function sendResponse(question, answer) {
+            try {
+                await fetch('/api/response', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        question: question,
+                        answer: answer,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+            } catch (error) {
+                console.error('Error sending response:', error);
+            }
+        }
+
+        // Create floating clouds
+        for (let i = 0; i < 8; i++) {
+            const cloud = document.createElement('div');
+            cloud.className = 'cloud';
+            cloud.textContent = '☁️';
+            cloud.style.top = Math.random() * 80 + 'vh';
+            cloud.style.animationDelay = Math.random() * 8 + 's';
+            cloud.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            document.getElementById('clouds').appendChild(cloud);
+        }
+    </script>
+</body>
+</html>
